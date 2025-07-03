@@ -1,8 +1,8 @@
-- 👋 Hi, I’m @Harold-Mitts and I work as a Customer Experience PM for Microsoft.
-- 👀 I’m interested in technical program management, systems engineering, Windows, PowerShell, Microsft Teams, and of course - Microsoft Copilot.
-- 🌱 I’m currently improving my AI skills.
-
-<!---
-Harold-Mitts/Harold-Mitts is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+- 👋 Hi, I’m **@Harold-Mitts** – Customer Experience PM at Microsoft.
+- 👀 Interests: technical program management, systems thinking, Windows, PowerShell, Microsoft Teams, and of course Copilot.
+- 🌱 Currently sharpening my AI toolbox with GitHub Copilot and Copilot Studio.
+- 🛠️ Everyday toolkit: M365 Copilot, VSCode + GitHub Copilot.
+- 🤝 Open to discovering your real-world scenarios powered by Microsoft 365 & AI.
+- 💡 I enjoy turning complex tech into clear workflows that help people get things done.
+- 📫 The best way to reach me is via GitHub Issues or LinkedIn.
+- 🔒 All views here are my own.

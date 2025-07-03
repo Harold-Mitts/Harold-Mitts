@@ -4,5 +4,5 @@
 - 🛠️ Everyday toolkit: M365 Copilot, VSCode + GitHub Copilot.
 - 🤝 Open to discovering your real-world scenarios powered by Microsoft 365 & AI.
 - 💡 I enjoy turning complex tech into clear workflows that help people get things done.
-- 📫 The best way to reach me is via GitHub Issues or LinkedIn.
+- 📫 The best way to reach me is via LinkedIn.
 - 🔒 All views here are my own.

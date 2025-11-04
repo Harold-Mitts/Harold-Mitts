@@ -1,4 +1,4 @@
-- 👋 Hi, I’m **@Harold-Mitts** – Customer Experience PM at Microsoft.
+- 👋 Hi, I’m **@Harold-Mitts** – Techniocal Program Manager at Microsoft.
 - 👀 Interests: technical program management, systems thinking, Windows, PowerShell, Microsoft Teams, and of course Copilot.
 - 🌱 Currently sharpening my AI toolbox with Azure Foundry, Semantic Kernel, GitHub Copilot, and Copilot Studio.
 - 🛠️ Everyday toolkit: M365 Copilot, VSCode + GitHub Copilot.

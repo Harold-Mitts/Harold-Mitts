@@ -1,5 +1,6 @@
 - 👋 Hi, I’m **@Harold-Mitts** – Technical Program Manager at Microsoft.
 - 👀 Interests: technical program management, systems thinking, Windows, PowerShell, Microsoft Teams, and of course Copilot.
+- 🦉 I focus on AI for Copilot Search, connectors, and extensibility to deliver customer success through reliable, integrated Copilot solutions.
 - 🌱 Currently sharpening my AI toolbox with Azure Foundry, Semantic Kernel, GitHub Copilot, and Copilot Studio.
 - 🛠️ Everyday toolkit: M365 Copilot, VSCode + GitHub Copilot.
 - 🤝 Open to discovering your real-world scenarios powered by Microsoft 365 & AI.

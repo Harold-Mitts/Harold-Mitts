@@ -8,7 +8,7 @@
 
 **Interests**: Technical program management, systems thinking, agents, skills, prompts, and the continuous evolution of Copilot Studio and GitHub Copilot.
 
-**How I Work**: The metrics below reflect my bias toward action over analysis. I invest heavily in context orchestration and tooling infrastructure because **the right scaffolding accelerates everyone's work.** Problem Crystallization scores lower by design—I'd rather iterate on working prototypes than debate specifications.
+**How I Work**: The metrics below reflect my bias toward action over analysis. I invest heavily in context orchestration and tooling infrastructure because **the right scaffolding accelerates everyone's work.** Problem Crystallization scores lower by design - I'd rather iterate on working prototypes than debate specifications.
 
 <sub>*Collaboration metrics: How I work with AI tools*</sub>
 

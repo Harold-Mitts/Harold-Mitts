@@ -3,17 +3,14 @@
 - 🦉 I focus on AI for Copilot Search, connectors, and extensibility to deliver customer success through reliable, integrated Copilot solutions.
 - 🌱 Currently sharpening my AI toolbox with Azure Foundry, GitHub Copilot, and Copilot Studio - all leveraging the power of Microsoft Graph to provide data-rich grounding.
 - 🛠️ Everyday toolkit: M365 Copilot, VSCode + GitHub Copilot.
-- 💻 Tech stack: PowerShell, Python, Markdown, Git, Azure, REST APIs, Model Context Protocol (MCP)
 - 🤝 Open to discovering your real-world scenarios powered by Microsoft 365 & AI.
 - 💡 I enjoy turning complex tech into clear workflows that help people get things done.
 - 📫 The best way to reach me is via LinkedIn.
 - 🔒 All views here are my own.
 
-I maintain a demo website with fictional company profiles and sample data for product demonstrations: [https://projects.azurewebsites.net](https://projects.azurewebsites.net)
+I operate a website of fictional content, used during customer demos. It is located here: [https://projects.azurewebsites.net](https://projects.azurewebsites.net)
 
 ---
-
-<sub>*Collaboration metrics: How I work with AI tools*</sub>
 
 ```
 🟩🟩🟩🟩🟩🟩🟩🟩🟩⬜ 95% Context Orchestration

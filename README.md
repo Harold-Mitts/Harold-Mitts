@@ -1,17 +1,13 @@
 - 👋 Hi, I’m **@Harold-Mitts** – Technical Program Manager at Microsoft.
-- 👀 Interests: technical program management, systems thinking, Windows, PowerShell, Microsoft Teams, and of course Copilot.
-- 🦉 I focus on AI for Copilot Search, connectors, and extensibility to deliver customer success through reliable, integrated Copilot solutions.
-- 🌱 Currently sharpening my AI toolbox with Azure Foundry, GitHub Copilot, and Copilot Studio - all leveraging the power of Microsoft Graph to provide data-rich grounding.
-- 🛠️ Everyday toolkit: M365 Copilot, VSCode + GitHub Copilot.
-- 💻 Tech stack: PowerShell, Python, Markdown, Git, Azure, REST APIs, Model Context Protocol (MCP)
-- 🤝 Open to discovering your real-world scenarios powered by Microsoft 365 & AI.
-- 💡 I enjoy turning complex tech into clear workflows that help people get things done.
-- 📫 The best way to reach me is via LinkedIn.
-- 🔒 All views here are my own.
+- 🎯 I turn complex technical problems into clear, actionable workflows that help people get things done.
+- 💡 My focus: AI-powered Copilot solutions (Search, Connectors, Extensibility) that actually deliver customer success.
 
-I maintain a demo website with fictional company profiles and sample data for product demonstrations: [https://projects.azurewebsites.net](https://projects.azurewebsites.net)
+**The Challenge**: Technical complexity shouldn't be a barrier to productivity. Too many teams struggle with tools that could transform their work—they just need someone to bridge the gap between "feature" and "outcome."
+**My Toolkit**: I orchestrate solutions using M365 Copilot, VSCode + GitHub Copilot, PowerShell, Python, and the Model Context Protocol (MCP)—always grounding intelligence with Microsoft Graph to ensure AI answers are accurate, not hallucinated.
 
----
+**Interests**: Technical program management, systems thinking, agents, skills, prompts, and the continuous evolution of Copilot Studio and GitHub Copilot.
+
+**How I Work**: The metrics below aren't vanity stats—they reflect my approach to collaboration. I invest heavily in context orchestration and tooling infrastructure because **the right scaffolding accelerates everyone's work.**
 
 <sub>*Collaboration metrics: How I work with AI tools*</sub>
 
@@ -22,3 +18,7 @@ I maintain a demo website with fictional company profiles and sample data for pr
 🟩🟩🟩🟩🟩🟩🟩🟩🟨⬜ 85% Iterative Partnership
 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100% Automation Instinct
 ```
+
+📫 **Let's Connect**: If you're wrestling with Copilot deployment, extensibility challenges, or turning executive vision into technical reality—[reach me on LinkedIn](https://linkedin.com/in/harold-mitts). I'm here to help.
+
+<sub>All views expressed are my own.</sub>

@@ -9,3 +9,13 @@
 - 🔒 All views here are my own.
 
 I operate a website of fictional content, used during customer demos. It is located here: [https://projects.azurewebsites.net](https://projects.azurewebsites.net)
+
+---
+
+```
+🟩🟩🟩🟩🟩🟩🟩🟩🟩⬜ 95% Context Orchestration
+🟩🟩🟩🟩🟩🟩🟩🟩🟩⬜ 90% Tooling Infrastructure  
+🟩🟩🟩🟩🟩🟩🟨🟨⬜⬜ 70% Problem Crystallization
+🟩🟩🟩🟩🟩🟩🟩🟩🟨⬜ 85% Iterative Partnership
+🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100% Automation Instinct
+```

@@ -3,6 +3,7 @@
 - 💡 My focus: AI-powered Copilot solutions (Search, Connectors, Extensibility) that actually deliver customer success.
 
 **The Challenge**: Technical complexity shouldn't be a barrier to productivity. Too many teams struggle with tools that could transform their work—they just need someone to bridge the gap between "feature" and "outcome."
+
 **My Toolkit**: I orchestrate solutions using M365 Copilot, VSCode + GitHub Copilot, PowerShell, Python, and the Model Context Protocol (MCP)—always grounding intelligence with Microsoft Graph to ensure AI answers are accurate, not hallucinated.
 
 **Interests**: Technical program management, systems thinking, agents, skills, prompts, and the continuous evolution of Copilot Studio and GitHub Copilot.

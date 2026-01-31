@@ -1,5 +1,14 @@
+<!--
+    TTS Multi-Mode Reader - Cross-Platform
+    Web-based text-to-speech using device speech synthesis.
+    Works on Windows, Mac, iOS, Android via Web Speech API.
+    Single Voice: One voice with adjustable rate/pitch/volume.
+    Conversation: Two alternating voices for dialog.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -368,6 +377,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -384,16 +394,13 @@
             <!-- Text Input Section -->
             <section class="text-panel">
                 <h2>📝 Text Input</h2>
-                <textarea 
-                    id="textInput" 
-                    placeholder="Enter text to speak..."
-                ></textarea>
+                <textarea id="textInput" placeholder="Enter text to speak..."></textarea>
             </section>
 
             <!-- Voice Controls Section -->
             <section class="controls-panel">
                 <h2>🎚️ Voice Controls</h2>
-                
+
                 <!-- Single Voice Mode Controls -->
                 <div id="singleVoiceControls">
                     <div class="voice-group">
@@ -437,12 +444,14 @@
 
                     <div class="slider-group">
                         <label>Rate: <span id="rateValueConv">1.2</span></label>
-                        <input type="range" id="rateSliderConv" min="0.5" max="2.0" step="0.1" value="1.2" class="slider">
+                        <input type="range" id="rateSliderConv" min="0.5" max="2.0" step="0.1" value="1.2"
+                            class="slider">
                     </div>
 
                     <div class="slider-group">
                         <label>Pitch: <span id="pitchValueConv">1.0</span></label>
-                        <input type="range" id="pitchSliderConv" min="0.5" max="2.0" step="0.1" value="1.0" class="slider">
+                        <input type="range" id="pitchSliderConv" min="0.5" max="2.0" step="0.1" value="1.0"
+                            class="slider">
                     </div>
 
                     <div class="slider-group">
@@ -481,7 +490,7 @@
                 this.nextQueued = false;
                 this.textChunks = [];
                 this.currentChunkIndex = 0;
-                
+
                 // DOM Elements
                 this.textInput = document.getElementById('textInput');
                 this.helpText = document.getElementById('helpText');
@@ -505,37 +514,37 @@
                 this.stopBtn = document.getElementById('stopBtn');
                 this.singleVoiceControls = document.getElementById('singleVoiceControls');
                 this.conversationControls = document.getElementById('conversationControls');
-                
+
                 this.init();
             }
-            
+
             init() {
                 // Load voices
                 this.loadVoices();
-                
+
                 // Voice loading event
                 if (this.synth.onvoiceschanged !== undefined) {
                     this.synth.onvoiceschanged = () => this.loadVoices();
                 }
-                
+
                 // Event listeners
                 this.setupEventListeners();
-                
+
                 this.updateStatus('Ready');
             }
-            
+
             loadVoices() {
                 this.voices = this.synth.getVoices();
-                
+
                 if (this.voices.length > 0) {
                     this.populateVoiceLists();
                 }
             }
-            
+
             populateVoiceLists() {
                 // Filter en-US voices
                 const enUSVoices = this.voices.filter(voice => voice.lang.startsWith('en-US'));
-                
+
                 // Populate single voice selector
                 this.voiceSelectSingle.innerHTML = '';
                 enUSVoices.forEach((voice, index) => {
@@ -544,7 +553,7 @@
                     option.value = this.voices.indexOf(voice);
                     this.voiceSelectSingle.appendChild(option);
                 });
-                
+
                 // Populate conversation selectors
                 this.voiceSelectA.innerHTML = '';
                 this.voiceSelectB.innerHTML = '';
@@ -553,43 +562,43 @@
                     optionA.textContent = `${voice.name} (${voice.lang})`;
                     optionA.value = this.voices.indexOf(voice);
                     this.voiceSelectA.appendChild(optionA);
-                    
+
                     const optionB = document.createElement('option');
                     optionB.textContent = `${voice.name} (${voice.lang})`;
                     optionB.value = this.voices.indexOf(voice);
                     this.voiceSelectB.appendChild(optionB);
                 });
-                
+
                 // Auto-select voices
                 this.autoSelectVoices();
             }
-            
+
             autoSelectVoices() {
                 // Find Andrew for single/Voice A
                 const andrewIndex = this.voices.findIndex(voice => {
                     const lowerName = voice.name.toLowerCase();
-                    return lowerName.includes('andrew') && 
-                           !lowerName.includes('multilingual') &&
-                           voice.lang.startsWith('en-US');
+                    return lowerName.includes('andrew') &&
+                        !lowerName.includes('multilingual') &&
+                        voice.lang.startsWith('en-US');
                 });
-                
+
                 // Find Jenny for Voice B
                 const jennyIndex = this.voices.findIndex(voice => {
                     const lowerName = voice.name.toLowerCase();
-                    return lowerName.includes('jenny') && 
-                           voice.lang.startsWith('en-US');
+                    return lowerName.includes('jenny') &&
+                        voice.lang.startsWith('en-US');
                 });
-                
+
                 if (andrewIndex !== -1) {
                     this.voiceSelectSingle.value = andrewIndex;
                     this.voiceSelectA.value = andrewIndex;
                 }
-                
+
                 if (jennyIndex !== -1) {
                     this.voiceSelectB.value = jennyIndex;
                 }
             }
-            
+
             setupEventListeners() {
                 // Mode switcher
                 document.querySelectorAll('.mode-btn').forEach(btn => {
@@ -598,47 +607,47 @@
                         this.switchMode(mode);
                     });
                 });
-                
+
                 // Slider updates - Single mode
                 this.rateSlider.addEventListener('input', (e) => {
                     this.rateValue.textContent = e.target.value;
                 });
-                
+
                 this.pitchSlider.addEventListener('input', (e) => {
                     this.pitchValue.textContent = e.target.value;
                 });
-                
+
                 this.volumeSlider.addEventListener('input', (e) => {
                     this.volumeValue.textContent = e.target.value;
                 });
-                
+
                 // Slider updates - Conversation mode
                 this.rateSliderConv.addEventListener('input', (e) => {
                     this.rateValueConv.textContent = e.target.value;
                 });
-                
+
                 this.pitchSliderConv.addEventListener('input', (e) => {
                     this.pitchValueConv.textContent = e.target.value;
                 });
-                
+
                 this.volumeSliderConv.addEventListener('input', (e) => {
                     this.volumeValueConv.textContent = e.target.value;
                 });
-                
+
                 // Playback controls
                 this.playBtn.addEventListener('click', () => this.play());
                 this.pauseBtn.addEventListener('click', () => this.pause());
                 this.stopBtn.addEventListener('click', () => this.stop());
             }
-            
+
             switchMode(mode) {
                 this.currentMode = mode;
-                
+
                 // Update UI
                 document.querySelectorAll('.mode-btn').forEach(btn => {
                     btn.classList.toggle('active', btn.dataset.mode === mode);
                 });
-                
+
                 if (mode === 'single') {
                     this.singleVoiceControls.classList.remove('hidden');
                     this.conversationControls.classList.add('hidden');
@@ -650,19 +659,19 @@
                     this.helpText.textContent = 'Format: "A: dialog text" or "B: dialog text" on separate lines';
                     this.textInput.placeholder = 'A: Hello! How are you today?\nB: I\'m doing great, thanks for asking!\nA: That\'s wonderful to hear.';
                 }
-                
+
                 // Stop any current playback
                 this.stop();
             }
-            
+
             play() {
                 const text = this.textInput.value.trim();
-                
+
                 if (!text) {
                     this.updateStatus('Error: Please enter text');
                     return;
                 }
-                
+
                 // If paused, resume
                 if (this.isPaused) {
                     this.synth.resume();
@@ -673,61 +682,61 @@
                     this.playBtn.disabled = true;
                     return;
                 }
-                
+
                 // Stop any current speech
                 this.synth.cancel();
-                
+
                 // Play based on mode
                 if (this.currentMode === 'single') {
                     this.playSingleVoice(text);
                 } else {
                     this.playConversation(text);
                 }
-                
+
                 // Update button states
                 this.playBtn.disabled = true;
                 this.pauseBtn.disabled = false;
                 this.stopBtn.disabled = false;
             }
-            
+
             playSingleVoice(text) {
                 // Split into chunks
                 this.textChunks = this.splitTextIntoChunks(text);
                 this.currentChunkIndex = 0;
-                
+
                 this.updateStatus(`Speaking (${this.textChunks.length} chunks)...`);
                 this.speakNextChunk();
             }
-            
+
             splitTextIntoChunks(text, maxLength = 4000) {
                 const sentences = text.match(/[^.!?]+[.!?]+[\s]*/g) || [text];
                 const chunks = [];
                 let currentChunk = '';
-                
+
                 sentences.forEach(sentence => {
                     const trimmedSentence = sentence.trim();
-                    
+
                     if (trimmedSentence.length > maxLength) {
                         if (currentChunk.length > 0) {
                             chunks.push(currentChunk.trim());
                             currentChunk = '';
                         }
-                        
+
                         let remainingText = trimmedSentence;
                         while (remainingText.length > maxLength) {
                             let splitIndex = remainingText.lastIndexOf(' ', maxLength);
                             if (splitIndex === -1) splitIndex = maxLength;
-                            
+
                             chunks.push(remainingText.substring(0, splitIndex).trim());
                             remainingText = remainingText.substring(splitIndex).trim();
                         }
-                        
+
                         if (remainingText.length > 0) {
                             chunks.push(remainingText);
                         }
                         return;
                     }
-                    
+
                     if (currentChunk.length + trimmedSentence.length + 1 > maxLength && currentChunk.length > 0) {
                         chunks.push(currentChunk.trim());
                         currentChunk = trimmedSentence;
@@ -735,75 +744,75 @@
                         currentChunk += (currentChunk.length > 0 ? ' ' : '') + trimmedSentence;
                     }
                 });
-                
+
                 if (currentChunk.trim().length > 0) {
                     chunks.push(currentChunk.trim());
                 }
-                
+
                 return chunks.length > 0 ? chunks : [text];
             }
-            
+
             speakNextChunk() {
                 if (this.currentChunkIndex >= this.textChunks.length) {
                     this.onSpeechEnd();
                     return;
                 }
-                
+
                 const chunk = this.textChunks[this.currentChunkIndex];
                 const utterance = new SpeechSynthesisUtterance(chunk);
-                
+
                 const voiceIndex = parseInt(this.voiceSelectSingle.value);
                 if (this.voices[voiceIndex]) {
                     utterance.voice = this.voices[voiceIndex];
                 }
-                
+
                 utterance.rate = parseFloat(this.rateSlider.value);
                 utterance.pitch = parseFloat(this.pitchSlider.value);
                 utterance.volume = parseFloat(this.volumeSlider.value);
-                
+
                 utterance.onend = () => {
                     this.currentChunkIndex++;
                     this.updateStatus(`Speaking chunk ${this.currentChunkIndex}/${this.textChunks.length}...`);
                     setTimeout(() => this.speakNextChunk(), 50);
                 };
-                
+
                 utterance.onerror = (event) => {
                     console.error('Speech error:', event);
                     this.updateStatus(`Error: ${event.error}`);
                     this.onSpeechEnd();
                 };
-                
+
                 this.synth.speak(utterance);
             }
-            
+
             playConversation(text) {
                 this.dialogParts = this.parseDialog(text);
-                
+
                 if (this.dialogParts.length === 0) {
                     this.updateStatus('Error: No valid dialog found. Use "A: text" or "B: text" format');
                     this.onSpeechEnd();
                     return;
                 }
-                
+
                 this.currentPartIndex = 0;
                 this.nextQueued = false;
-                
+
                 const speakerACount = this.dialogParts.filter(p => p.speaker === 'A').length;
                 const speakerBCount = this.dialogParts.filter(p => p.speaker === 'B').length;
-                
+
                 this.updateStatus(`Playing conversation (${this.dialogParts.length} lines: A×${speakerACount}, B×${speakerBCount})`);
                 this.speakNextPart();
             }
-            
+
             parseDialog(text) {
                 const lines = text.split('\n').filter(line => line.trim().length > 0);
                 const dialogParts = [];
-                
+
                 lines.forEach(line => {
                     const trimmedLine = line.trim();
                     const colonMatch = trimmedLine.match(/^([AB]):\s*(.+)$/i);
                     const bracketMatch = trimmedLine.match(/^\[([AB])\]\s*(.+)$/i);
-                    
+
                     if (colonMatch) {
                         dialogParts.push({
                             speaker: colonMatch[1].toUpperCase(),
@@ -815,8 +824,8 @@
                             text: bracketMatch[2].trim()
                         });
                     } else if (trimmedLine.length > 0) {
-                        const lastSpeaker = dialogParts.length > 0 
-                            ? dialogParts[dialogParts.length - 1].speaker 
+                        const lastSpeaker = dialogParts.length > 0
+                            ? dialogParts[dialogParts.length - 1].speaker
                             : 'A';
                         dialogParts.push({
                             speaker: lastSpeaker,
@@ -824,38 +833,38 @@
                         });
                     }
                 });
-                
+
                 return dialogParts;
             }
-            
+
             speakNextPart() {
                 if (this.currentPartIndex >= this.dialogParts.length) {
                     this.onSpeechEnd();
                     return;
                 }
-                
+
                 const part = this.dialogParts[this.currentPartIndex];
                 const utterance = new SpeechSynthesisUtterance(part.text);
-                
-                const voiceIndex = part.speaker === 'A' 
+
+                const voiceIndex = part.speaker === 'A'
                     ? parseInt(this.voiceSelectA.value)
                     : parseInt(this.voiceSelectB.value);
-                
+
                 if (this.voices[voiceIndex]) {
                     utterance.voice = this.voices[voiceIndex];
                 }
-                
+
                 utterance.rate = parseFloat(this.rateSliderConv.value);
                 utterance.pitch = parseFloat(this.pitchSliderConv.value);
                 utterance.volume = parseFloat(this.volumeSliderConv.value);
-                
+
                 let nextQueued = false;
                 const partIndex = this.currentPartIndex;
-                
+
                 utterance.onstart = () => {
                     this.updateStatus(`Speaking [${part.speaker}]: "${part.text.substring(0, 40)}${part.text.length > 40 ? '...' : ''}" (${partIndex + 1}/${this.dialogParts.length})`);
                 };
-                
+
                 utterance.onboundary = (event) => {
                     if (!nextQueued && event.name === 'word') {
                         const remainingChars = part.text.length - event.charIndex;
@@ -866,23 +875,23 @@
                         }
                     }
                 };
-                
+
                 utterance.onend = () => {
                     if (!nextQueued) {
                         this.currentPartIndex++;
                         this.speakNextPart();
                     }
                 };
-                
+
                 utterance.onerror = (event) => {
                     console.error('Speech error:', event);
                     this.updateStatus(`Error: ${event.error}`);
                     this.onSpeechEnd();
                 };
-                
+
                 this.synth.speak(utterance);
             }
-            
+
             pause() {
                 if (this.synth.speaking && !this.isPaused) {
                     this.synth.pause();
@@ -892,7 +901,7 @@
                     this.pauseBtn.disabled = true;
                 }
             }
-            
+
             stop() {
                 this.synth.cancel();
                 this.isPaused = false;
@@ -903,7 +912,7 @@
                 this.currentChunkIndex = 0;
                 this.onSpeechEnd();
             }
-            
+
             onSpeechEnd() {
                 this.updateStatus('Ready');
                 this.playBtn.disabled = false;
@@ -911,7 +920,7 @@
                 this.stopBtn.disabled = true;
                 this.isPaused = false;
             }
-            
+
             updateStatus(message) {
                 // Status display removed - this is now a no-op
                 // Kept for backward compatibility with existing code
@@ -924,4 +933,5 @@
         });
     </script>
 </body>
+
 </html>

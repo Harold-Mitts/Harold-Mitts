@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTS Multi-Mode</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-panel: rgba(26, 26, 46, 0.7);
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-danger: #ef4444;
+            --accent-success: #10b981;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0b0;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle at top right, #1a1a2e 0%, #0a0a0f 50%, #16213e 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0.75rem;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 0.75rem 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px var(--shadow-color);
+            margin-bottom: 1rem;
+        }
+
+        header h1 {
+            font-size: 1.75rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.25rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Mode Switcher */
+        .mode-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .mode-btn {
+            padding: 0.4rem 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .mode-btn:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .help-text {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            margin-top: 0.35rem;
+            font-style: italic;
+            min-height: 1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+            min-height: 0;
+        }
+
+        /* Text Panel */
+        .text-panel {
+            flex: 1;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .text-panel h2 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-primary);
+        }
+
+        #textInput {
+            flex: 1;
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Consolas', 'Courier New', monospace;
+            resize: none;
+            transition: border-color 0.3s ease;
+        }
+
+        #textInput:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        #textInput::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Controls Panel */
+        .controls-panel {
+            width: 320px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .controls-panel h2 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--accent-primary);
+        }
+
+        /* Voice Groups */
+        .voice-group {
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .voice-group h3 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .voice-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .voice-a-indicator {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        }
+
+        .voice-b-indicator {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .voice-group select {
+            width: 100%;
+            padding: 0.65rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .voice-group select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .voice-group select option {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        /* Sliders */
+        .slider-group {
+            margin-bottom: 0.65rem;
+        }
+
+        .slider-group label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.35rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .slider-group label span {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.3);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.5);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.7rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-color: var(--accent-primary);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            border-color: var(--text-secondary);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--accent-danger), #dc2626);
+            border-color: var(--accent-danger);
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Hidden elements */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .controls-panel {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎙️ TTS Multi-Mode</h1>
+            <p class="subtitle">Single Voice & Conversation Reader</p>
+            <div class="mode-switcher">
+                <button class="mode-btn active" data-mode="single">Single Voice</button>
+                <button class="mode-btn" data-mode="conversation">Conversation</button>
+            </div>
+            <p class="help-text" id="helpText">Enter any text to speak</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Text Input Section -->
+            <section class="text-panel">
+                <h2>📝 Text Input</h2>
+                <textarea 
+                    id="textInput" 
+                    placeholder="Enter text to speak..."
+                ></textarea>
+            </section>
+
+            <!-- Voice Controls Section -->
+            <section class="controls-panel">
+                <h2>🎚️ Voice Controls</h2>
+                
+                <!-- Single Voice Mode Controls -->
+                <div id="singleVoiceControls">
+                    <div class="voice-group">
+                        <h3>Voice</h3>
+                        <select id="voiceSelectSingle">
+                            <option>Loading voices...</option>
+                        </select>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Rate: <span id="rateValue">1.2</span></label>
+                        <input type="range" id="rateSlider" min="0.5" max="2.0" step="0.1" value="1.2" class="slider">
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Pitch: <span id="pitchValue">1.0</span></label>
+                        <input type="range" id="pitchSlider" min="0.5" max="2.0" step="0.1" value="1.0" class="slider">
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Volume: <span id="volumeValue">1.0</span></label>
+                        <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1.0" class="slider">
+                    </div>
+                </div>
+
+                <!-- Conversation Mode Controls -->
+                <div id="conversationControls" class="hidden">
+                    <div class="voice-group">
+                        <h3><span class="voice-indicator voice-a-indicator"></span> Voice A</h3>
+                        <select id="voiceSelectA">
+                            <option>Loading voices...</option>
+                        </select>
+                    </div>
+
+                    <div class="voice-group">
+                        <h3><span class="voice-indicator voice-b-indicator"></span> Voice B</h3>
+                        <select id="voiceSelectB">
+                            <option>Loading voices...</option>
+                        </select>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Rate: <span id="rateValueConv">1.2</span></label>
+                        <input type="range" id="rateSliderConv" min="0.5" max="2.0" step="0.1" value="1.2" class="slider">
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Pitch: <span id="pitchValueConv">1.0</span></label>
+                        <input type="range" id="pitchSliderConv" min="0.5" max="2.0" step="0.1" value="1.0" class="slider">
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Volume: <span id="volumeValueConv">1.0</span></label>
+                        <input type="range" id="volumeSliderConv" min="0" max="1" step="0.1" value="1.0" class="slider">
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button id="playBtn" class="btn btn-primary">
+                        <span>▶️ Play</span>
+                    </button>
+                    <button id="pauseBtn" class="btn btn-secondary" disabled>
+                        <span>⏸️ Pause</span>
+                    </button>
+                    <button id="stopBtn" class="btn btn-danger" disabled>
+                        <span>⏹️ Stop</span>
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // TTS Multi-Mode
+        // Combines single voice and dual-voice conversation modes
+
+        class TTSMultiMode {
+            constructor() {
+                this.synth = window.speechSynthesis;
+                this.voices = [];
+                this.isPaused = false;
+                this.currentMode = 'single';
+                this.dialogParts = [];
+                this.currentPartIndex = 0;
+                this.nextQueued = false;
+                this.textChunks = [];
+                this.currentChunkIndex = 0;
+                
+                // DOM Elements
+                this.textInput = document.getElementById('textInput');
+                this.helpText = document.getElementById('helpText');
+                this.voiceSelectSingle = document.getElementById('voiceSelectSingle');
+                this.voiceSelectA = document.getElementById('voiceSelectA');
+                this.voiceSelectB = document.getElementById('voiceSelectB');
+                this.rateSlider = document.getElementById('rateSlider');
+                this.pitchSlider = document.getElementById('pitchSlider');
+                this.volumeSlider = document.getElementById('volumeSlider');
+                this.rateValue = document.getElementById('rateValue');
+                this.pitchValue = document.getElementById('pitchValue');
+                this.volumeValue = document.getElementById('volumeValue');
+                this.rateSliderConv = document.getElementById('rateSliderConv');
+                this.pitchSliderConv = document.getElementById('pitchSliderConv');
+                this.volumeSliderConv = document.getElementById('volumeSliderConv');
+                this.rateValueConv = document.getElementById('rateValueConv');
+                this.pitchValueConv = document.getElementById('pitchValueConv');
+                this.volumeValueConv = document.getElementById('volumeValueConv');
+                this.playBtn = document.getElementById('playBtn');
+                this.pauseBtn = document.getElementById('pauseBtn');
+                this.stopBtn = document.getElementById('stopBtn');
+                this.singleVoiceControls = document.getElementById('singleVoiceControls');
+                this.conversationControls = document.getElementById('conversationControls');
+                
+                this.init();
+            }
+            
+            init() {
+                // Load voices
+                this.loadVoices();
+                
+                // Voice loading event
+                if (this.synth.onvoiceschanged !== undefined) {
+                    this.synth.onvoiceschanged = () => this.loadVoices();
+                }
+                
+                // Event listeners
+                this.setupEventListeners();
+                
+                this.updateStatus('Ready');
+            }
+            
+            loadVoices() {
+                this.voices = this.synth.getVoices();
+                
+                if (this.voices.length > 0) {
+                    this.populateVoiceLists();
+                }
+            }
+            
+            populateVoiceLists() {
+                // Filter en-US voices
+                const enUSVoices = this.voices.filter(voice => voice.lang.startsWith('en-US'));
+                
+                // Populate single voice selector
+                this.voiceSelectSingle.innerHTML = '';
+                enUSVoices.forEach((voice, index) => {
+                    const option = document.createElement('option');
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    option.value = this.voices.indexOf(voice);
+                    this.voiceSelectSingle.appendChild(option);
+                });
+                
+                // Populate conversation selectors
+                this.voiceSelectA.innerHTML = '';
+                this.voiceSelectB.innerHTML = '';
+                enUSVoices.forEach((voice, index) => {
+                    const optionA = document.createElement('option');
+                    optionA.textContent = `${voice.name} (${voice.lang})`;
+                    optionA.value = this.voices.indexOf(voice);
+                    this.voiceSelectA.appendChild(optionA);
+                    
+                    const optionB = document.createElement('option');
+                    optionB.textContent = `${voice.name} (${voice.lang})`;
+                    optionB.value = this.voices.indexOf(voice);
+                    this.voiceSelectB.appendChild(optionB);
+                });
+                
+                // Auto-select voices
+                this.autoSelectVoices();
+            }
+            
+            autoSelectVoices() {
+                // Find Andrew for single/Voice A
+                const andrewIndex = this.voices.findIndex(voice => {
+                    const lowerName = voice.name.toLowerCase();
+                    return lowerName.includes('andrew') && 
+                           !lowerName.includes('multilingual') &&
+                           voice.lang.startsWith('en-US');
+                });
+                
+                // Find Jenny for Voice B
+                const jennyIndex = this.voices.findIndex(voice => {
+                    const lowerName = voice.name.toLowerCase();
+                    return lowerName.includes('jenny') && 
+                           voice.lang.startsWith('en-US');
+                });
+                
+                if (andrewIndex !== -1) {
+                    this.voiceSelectSingle.value = andrewIndex;
+                    this.voiceSelectA.value = andrewIndex;
+                }
+                
+                if (jennyIndex !== -1) {
+                    this.voiceSelectB.value = jennyIndex;
+                }
+            }
+            
+            setupEventListeners() {
+                // Mode switcher
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const mode = e.target.dataset.mode;
+                        this.switchMode(mode);
+                    });
+                });
+                
+                // Slider updates - Single mode
+                this.rateSlider.addEventListener('input', (e) => {
+                    this.rateValue.textContent = e.target.value;
+                });
+                
+                this.pitchSlider.addEventListener('input', (e) => {
+                    this.pitchValue.textContent = e.target.value;
+                });
+                
+                this.volumeSlider.addEventListener('input', (e) => {
+                    this.volumeValue.textContent = e.target.value;
+                });
+                
+                // Slider updates - Conversation mode
+                this.rateSliderConv.addEventListener('input', (e) => {
+                    this.rateValueConv.textContent = e.target.value;
+                });
+                
+                this.pitchSliderConv.addEventListener('input', (e) => {
+                    this.pitchValueConv.textContent = e.target.value;
+                });
+                
+                this.volumeSliderConv.addEventListener('input', (e) => {
+                    this.volumeValueConv.textContent = e.target.value;
+                });
+                
+                // Playback controls
+                this.playBtn.addEventListener('click', () => this.play());
+                this.pauseBtn.addEventListener('click', () => this.pause());
+                this.stopBtn.addEventListener('click', () => this.stop());
+            }
+            
+            switchMode(mode) {
+                this.currentMode = mode;
+                
+                // Update UI
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.mode === mode);
+                });
+                
+                if (mode === 'single') {
+                    this.singleVoiceControls.classList.remove('hidden');
+                    this.conversationControls.classList.add('hidden');
+                    this.helpText.textContent = 'Enter any text to speak';
+                    this.textInput.placeholder = 'Enter text to speak...';
+                } else {
+                    this.singleVoiceControls.classList.add('hidden');
+                    this.conversationControls.classList.remove('hidden');
+                    this.helpText.textContent = 'Format: "A: dialog text" or "B: dialog text" on separate lines';
+                    this.textInput.placeholder = 'A: Hello! How are you today?\nB: I\'m doing great, thanks for asking!\nA: That\'s wonderful to hear.';
+                }
+                
+                // Stop any current playback
+                this.stop();
+            }
+            
+            play() {
+                const text = this.textInput.value.trim();
+                
+                if (!text) {
+                    this.updateStatus('Error: Please enter text');
+                    return;
+                }
+                
+                // If paused, resume
+                if (this.isPaused) {
+                    this.synth.resume();
+                    this.isPaused = false;
+                    this.updateStatus('Resumed');
+                    this.pauseBtn.disabled = false;
+                    this.stopBtn.disabled = false;
+                    this.playBtn.disabled = true;
+                    return;
+                }
+                
+                // Stop any current speech
+                this.synth.cancel();
+                
+                // Play based on mode
+                if (this.currentMode === 'single') {
+                    this.playSingleVoice(text);
+                } else {
+                    this.playConversation(text);
+                }
+                
+                // Update button states
+                this.playBtn.disabled = true;
+                this.pauseBtn.disabled = false;
+                this.stopBtn.disabled = false;
+            }
+            
+            playSingleVoice(text) {
+                // Split into chunks
+                this.textChunks = this.splitTextIntoChunks(text);
+                this.currentChunkIndex = 0;
+                
+                this.updateStatus(`Speaking (${this.textChunks.length} chunks)...`);
+                this.speakNextChunk();
+            }
+            
+            splitTextIntoChunks(text, maxLength = 4000) {
+                const sentences = text.match(/[^.!?]+[.!?]+[\s]*/g) || [text];
+                const chunks = [];
+                let currentChunk = '';
+                
+                sentences.forEach(sentence => {
+                    const trimmedSentence = sentence.trim();
+                    
+                    if (trimmedSentence.length > maxLength) {
+                        if (currentChunk.length > 0) {
+                            chunks.push(currentChunk.trim());
+                            currentChunk = '';
+                        }
+                        
+                        let remainingText = trimmedSentence;
+                        while (remainingText.length > maxLength) {
+                            let splitIndex = remainingText.lastIndexOf(' ', maxLength);
+                            if (splitIndex === -1) splitIndex = maxLength;
+                            
+                            chunks.push(remainingText.substring(0, splitIndex).trim());
+                            remainingText = remainingText.substring(splitIndex).trim();
+                        }
+                        
+                        if (remainingText.length > 0) {
+                            chunks.push(remainingText);
+                        }
+                        return;
+                    }
+                    
+                    if (currentChunk.length + trimmedSentence.length + 1 > maxLength && currentChunk.length > 0) {
+                        chunks.push(currentChunk.trim());
+                        currentChunk = trimmedSentence;
+                    } else {
+                        currentChunk += (currentChunk.length > 0 ? ' ' : '') + trimmedSentence;
+                    }
+                });
+                
+                if (currentChunk.trim().length > 0) {
+                    chunks.push(currentChunk.trim());
+                }
+                
+                return chunks.length > 0 ? chunks : [text];
+            }
+            
+            speakNextChunk() {
+                if (this.currentChunkIndex >= this.textChunks.length) {
+                    this.onSpeechEnd();
+                    return;
+                }
+                
+                const chunk = this.textChunks[this.currentChunkIndex];
+                const utterance = new SpeechSynthesisUtterance(chunk);
+                
+                const voiceIndex = parseInt(this.voiceSelectSingle.value);
+                if (this.voices[voiceIndex]) {
+                    utterance.voice = this.voices[voiceIndex];
+                }
+                
+                utterance.rate = parseFloat(this.rateSlider.value);
+                utterance.pitch = parseFloat(this.pitchSlider.value);
+                utterance.volume = parseFloat(this.volumeSlider.value);
+                
+                utterance.onend = () => {
+                    this.currentChunkIndex++;
+                    this.updateStatus(`Speaking chunk ${this.currentChunkIndex}/${this.textChunks.length}...`);
+                    setTimeout(() => this.speakNextChunk(), 50);
+                };
+                
+                utterance.onerror = (event) => {
+                    console.error('Speech error:', event);
+                    this.updateStatus(`Error: ${event.error}`);
+                    this.onSpeechEnd();
+                };
+                
+                this.synth.speak(utterance);
+            }
+            
+            playConversation(text) {
+                this.dialogParts = this.parseDialog(text);
+                
+                if (this.dialogParts.length === 0) {
+                    this.updateStatus('Error: No valid dialog found. Use "A: text" or "B: text" format');
+                    this.onSpeechEnd();
+                    return;
+                }
+                
+                this.currentPartIndex = 0;
+                this.nextQueued = false;
+                
+                const speakerACount = this.dialogParts.filter(p => p.speaker === 'A').length;
+                const speakerBCount = this.dialogParts.filter(p => p.speaker === 'B').length;
+                
+                this.updateStatus(`Playing conversation (${this.dialogParts.length} lines: A×${speakerACount}, B×${speakerBCount})`);
+                this.speakNextPart();
+            }
+            
+            parseDialog(text) {
+                const lines = text.split('\n').filter(line => line.trim().length > 0);
+                const dialogParts = [];
+                
+                lines.forEach(line => {
+                    const trimmedLine = line.trim();
+                    const colonMatch = trimmedLine.match(/^([AB]):\s*(.+)$/i);
+                    const bracketMatch = trimmedLine.match(/^\[([AB])\]\s*(.+)$/i);
+                    
+                    if (colonMatch) {
+                        dialogParts.push({
+                            speaker: colonMatch[1].toUpperCase(),
+                            text: colonMatch[2].trim()
+                        });
+                    } else if (bracketMatch) {
+                        dialogParts.push({
+                            speaker: bracketMatch[1].toUpperCase(),
+                            text: bracketMatch[2].trim()
+                        });
+                    } else if (trimmedLine.length > 0) {
+                        const lastSpeaker = dialogParts.length > 0 
+                            ? dialogParts[dialogParts.length - 1].speaker 
+                            : 'A';
+                        dialogParts.push({
+                            speaker: lastSpeaker,
+                            text: trimmedLine
+                        });
+                    }
+                });
+                
+                return dialogParts;
+            }
+            
+            speakNextPart() {
+                if (this.currentPartIndex >= this.dialogParts.length) {
+                    this.onSpeechEnd();
+                    return;
+                }
+                
+                const part = this.dialogParts[this.currentPartIndex];
+                const utterance = new SpeechSynthesisUtterance(part.text);
+                
+                const voiceIndex = part.speaker === 'A' 
+                    ? parseInt(this.voiceSelectA.value)
+                    : parseInt(this.voiceSelectB.value);
+                
+                if (this.voices[voiceIndex]) {
+                    utterance.voice = this.voices[voiceIndex];
+                }
+                
+                utterance.rate = parseFloat(this.rateSliderConv.value);
+                utterance.pitch = parseFloat(this.pitchSliderConv.value);
+                utterance.volume = parseFloat(this.volumeSliderConv.value);
+                
+                let nextQueued = false;
+                const partIndex = this.currentPartIndex;
+                
+                utterance.onstart = () => {
+                    this.updateStatus(`Speaking [${part.speaker}]: "${part.text.substring(0, 40)}${part.text.length > 40 ? '...' : ''}" (${partIndex + 1}/${this.dialogParts.length})`);
+                };
+                
+                utterance.onboundary = (event) => {
+                    if (!nextQueued && event.name === 'word') {
+                        const remainingChars = part.text.length - event.charIndex;
+                        if (remainingChars < 100 && remainingChars > 0) {
+                            nextQueued = true;
+                            this.currentPartIndex++;
+                            this.speakNextPart();
+                        }
+                    }
+                };
+                
+                utterance.onend = () => {
+                    if (!nextQueued) {
+                        this.currentPartIndex++;
+                        this.speakNextPart();
+                    }
+                };
+                
+                utterance.onerror = (event) => {
+                    console.error('Speech error:', event);
+                    this.updateStatus(`Error: ${event.error}`);
+                    this.onSpeechEnd();
+                };
+                
+                this.synth.speak(utterance);
+            }
+            
+            pause() {
+                if (this.synth.speaking && !this.isPaused) {
+                    this.synth.pause();
+                    this.isPaused = true;
+                    this.updateStatus('Paused');
+                    this.playBtn.disabled = false;
+                    this.pauseBtn.disabled = true;
+                }
+            }
+            
+            stop() {
+                this.synth.cancel();
+                this.isPaused = false;
+                this.currentPartIndex = 0;
+                this.dialogParts = [];
+                this.nextQueued = false;
+                this.textChunks = [];
+                this.currentChunkIndex = 0;
+                this.onSpeechEnd();
+            }
+            
+            onSpeechEnd() {
+                this.updateStatus('Ready');
+                this.playBtn.disabled = false;
+                this.pauseBtn.disabled = true;
+                this.stopBtn.disabled = true;
+                this.isPaused = false;
+            }
+            
+            updateStatus(message) {
+                // Status display removed - this is now a no-op
+                // Kept for backward compatibility with existing code
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            new TTSMultiMode();
+        });
+    </script>
+</body>
+</html>
